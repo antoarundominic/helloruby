@@ -1,7 +1,7 @@
 <?PHP
 
 $no="9994285039";
-$apiToken="";  // PHPHive Truecaller API Token, Obtain it from https://tcapi.phphive.info/console/
+$apiToken="a34pZ5S67z";  // PHPHive Truecaller API Token, Obtain it from https://tcapi.phphive.info/console/
 
 $uri = 'https://tcapi.phphive.info/'.$apiToken.'/search/'.$no;
 $ch = curl_init($uri);
