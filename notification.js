@@ -1,32 +1,32 @@
 var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
 (function($) {
-  init() {
-    loadServiceWorker();
+  init: function() {
+    this.loadServiceWorker();
     // subscribe();
   },
 
-  loadServiceWorker() {
-    $.getScript( "ajax/sw.js" )
+  loadServiceWorker: function() {
+    $.getScript( "https://github.com/jaga3421/helloruby/blob/master/sw.js" )
     .done(function( script, textStatus ) {
       console.log( textStatus );
-      subscribe();
+      this.subscribe();
     })
     .fail(function( jqxhr, settings, exception ) {
         $( "div.log" ).text( "Triggered ajaxError handler." );
     });
 
   },
-  subscribe() {
+  subscribe: function() {
     if ('serviceWorker' in navigator) { 
       navigator.serviceWorker.register('sw.js').then(function() {
         return navigator.serviceWorker.ready;
       }).then(function(reg) {
         console.log('Service Worker is ready)', reg);
         reg.pushManager.subscribe({userVisibleOnly: true}).then(function(subscription) {
-          var mergedEndpoint = endpointWorkaround(subscription);
-          var deviceId = getDeviceId(mergedEndpoint);
-          registerDevice(deviceId);
+          var mergedEndpoint = this.endpointWorkaround(subscription);
+          var deviceId = this.getDeviceId(mergedEndpoint);
+          this.registerDevice(deviceId);
         });
       }).catch(function(err) {
         console.log('Service Worker error', error);
@@ -34,12 +34,12 @@ var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
     }
   },
 
-  endpointWorkaround(pushSubscription) {
+  endpointWorkaround: function(pushSubscription) {
     if (pushSubscription.endpoint.indexOf(GCM_ENDPOINT) !== 0) {
       return pushSubscription.endpoint;
     }
     var mergedEndpoint = pushSubscription.endpoint;
-    if  (isSubscriptionIdPresent()) {
+    if  (this.isSubscriptionIdPresent()) {
       mergedEndpoint = [pushSubscription.endpoint, '/', pushSubscription.subscriptionId].join('');
     }
     return mergedEndpoint;
@@ -50,7 +50,7 @@ var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
     pushSubscription.endpoint.indexOf(pushSubscription.subscriptionId) === -1);
   },
 
-  getDeviceId(mergedEndpoint) {
+  getDeviceId: function(mergedEndpoint) {
     if (mergedEndpoint.indexOf(GCM_ENDPOINT) !== 0) {
       console.log('This browser isn\'t currently ' +
         'supported for this demo');
@@ -60,7 +60,7 @@ var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
     var subscriptionId = endpointSections[endpointSections.length - 1];
   },
 
-  registerDevice(deviceId) {
+  registerDevice: function(deviceId) {
     var userEmail = domHelper.getAgentEmail();
     $.ajax({
       data: {email: userEmail, deviceId: deviceId},
@@ -69,5 +69,6 @@ var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
       dataType: 'json',
       success: function(data){console.log('Registered Successfully!'); }
     });
-  }
+  },
+  this.init();
 }) (jQuery);
