@@ -1,7 +1,8 @@
 var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
 
 (function($) {
-  init: function() {
+  return {
+    init: function() {
     this.loadServiceWorker();
     // subscribe();
   },
@@ -69,6 +70,6 @@ var GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send';
       dataType: 'json',
       success: function(data){console.log('Registered Successfully!'); }
     });
-  },
-  this.init();
+  }
+  }
 }) (jQuery);
